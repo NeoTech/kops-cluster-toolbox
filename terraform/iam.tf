@@ -7,6 +7,10 @@ resource "aws_iam_user" "kops" {
   }
 }
 
+resource "aws_iam_access_key" "kops_access_key" {
+  user = "${aws_iam_user.kops.name}"
+}
+
 resource "aws_iam_user_policy_attachment" "kops_ec2_full_access" {
   user       = aws_iam_user.kops.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"

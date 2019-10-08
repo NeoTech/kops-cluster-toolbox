@@ -3,6 +3,6 @@ terraform {
 
   // See https://github.com/hashicorp/terraform/issues/13022
   backend "s3" {
-    key    = "terraform.tfstate"
+    key = "terraform.tfstate"
   }
 }

@@ -31,8 +31,7 @@ module "vpc" {
 
   tags = merge(
     {
-      "Name"                                      = var.project_name
-      "kubernetes.io/cluster/${var.project_name}" = "owned"
+      "kubernetes.io/cluster/${var.project_name}" = "shared"
     },
     var.vpc_extra_tags,
   )
@@ -51,6 +50,6 @@ module "ingress_sg" {
   vpc_id      = module.vpc.vpc_id
 
   ingress_cidr_blocks = [var.vpc_cidr_block]
-  ingress_rules       = ["https-443-tcp","http-80-tcp"]
+  ingress_rules       = ["https-443-tcp", "http-80-tcp"]
 }
 
