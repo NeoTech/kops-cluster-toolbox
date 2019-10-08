@@ -165,7 +165,7 @@ spec:
     kops.k8s.io/instancegroup: master-eu-central-1a
   role: Master
   subnets:
-  - eu-central-1a
+  - agrium-k8s-eu-central-1a
 
 ---
 
@@ -187,7 +187,7 @@ spec:
     kops.k8s.io/instancegroup: nodes
   role: Node
   subnets:
-  - eu-central-1a
-  - eu-central-1b
-  - eu-central-1c
+  - agrium-k8s-eu-central-1a
+  - agrium-k8s-eu-central-1b
+  - agrium-k8s-eu-central-1c
 
