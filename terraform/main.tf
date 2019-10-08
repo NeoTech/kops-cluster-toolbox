@@ -31,8 +31,7 @@ module "vpc" {
 
   tags = merge(
     {
-      "Name"                                      = var.project_name
-      "kubernetes.io/cluster/${var.project_name}" = "owned"
+      "kubernetes.io/cluster/${var.project_name}" = "shared"
     },
     var.vpc_extra_tags,
   )
