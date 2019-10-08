@@ -78,6 +78,7 @@ spec:
   masterInternalName: api.internal.ops.k8s.nearform.net
   masterPublicName: api.ops.k8s.nearform.net
   networkCIDR: 172.20.0.0/16
+  networkID: vpc-071762f65d1a29b67
   networking:
     weave:
       mtu: 8912
@@ -86,30 +87,36 @@ spec:
   - 0.0.0.0/0
   sshKeyName: kops-ssh-key
   subnets:
-  - cidr: 172.20.32.0/19
-    name: eu-central-1a
+  - cidr: 172.20.0.0/22
+    name: agrium-k8s
     type: Private
     zone: eu-central-1a
-  - cidr: 172.20.64.0/19
-    name: eu-central-1b
+    id: subnet-0b1d1c3b54e61f16b
+  - cidr: 172.20.4.0/22
+    name: agrium-k8s
     type: Private
     zone: eu-central-1b
-  - cidr: 172.20.96.0/19
-    name: eu-central-1c
+    id: subnet-0b0719cfc422965ae
+  - cidr: 172.20.8.0/22
+    name: agrium-k8s
     type: Private
     zone: eu-central-1c
-  - cidr: 172.20.0.0/22
+    id: subnet-0ecb2b4ae845e4c7b
+  - cidr: 172.20.100.0/22
     name: utility-eu-central-1a
     type: Utility
     zone: eu-central-1a
-  - cidr: 172.20.4.0/22
+    id: subnet-034fed59df314183f
+  - cidr: 172.20.104.0/22
     name: utility-eu-central-1b
     type: Utility
     zone: eu-central-1b
-  - cidr: 172.20.8.0/22
+    id: subnet-083c8ba72edd1a47c
+  - cidr: 172.20.108.0/22
     name: utility-eu-central-1c
     type: Utility
     zone: eu-central-1c
+    id: subnet-022155a520213b59a
   topology:
     bastion:
       bastionPublicName: bastion.ops.k8s.nearform.net
