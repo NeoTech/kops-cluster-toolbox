@@ -1,0 +1,82 @@
+defaults: &defaults
+  docker:
+    - image: golang image for workload ??
+  working_directory: ~/
+  environment:
+    DOCKER_REPO: "REPO URI"
+    DOCKER_WORKLOAD: "workload docker name"
+    DOCKER_BACKEND: "titus-backend"
+    AWS_ECR_REGION: "us-central-1"
+    AWS_EKS_REGION: "eu-central-1"
+    CLUSTER_NAME: "ops.k8s.nearform.net"
+version: 2
+jobs:
+  install:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: "Do something"
+          command: "prequisit commands"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  build-terraform:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Do something"
+          command: "Some command"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  build-kops:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Do something"
+          command: "Some command"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  test-cluster:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Do something"
+          command: "Some command"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+workflows:
+  version: 2
+  untagged_build:
+    jobs:
+      - install
+      - build-terraform:
+          requires:
+            - install
+          filters:
+            branches:
+                only:
+                    - master
+            tags:
+                ignore: /.*/
+      - build-kops:
+          requires:
+            - build-terraform
+      - test-cluster:
+          requires:
+            - install
+            - build-terraform
+            - build-kops
