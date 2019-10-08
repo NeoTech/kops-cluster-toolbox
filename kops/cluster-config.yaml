@@ -49,7 +49,7 @@ spec:
   cloudLabels:
     kubernetes.io/cluster/ops.k8s.nearform.net: owned
   cloudProvider: aws
-  configBase: s3://agrium-k8s-state-store/ops.k8s.nearform.net
+  configBase: s3://agrium-k8-kops-state-store/ops.k8s.nearform.net
   etcdClusters:
   - etcdMembers:
     - instanceGroup: master-eu-central-1a
@@ -73,7 +73,7 @@ spec:
   kubeProxy:
       metricsBindAddress: 0.0.0.0
   kubernetesApiAccess:
-  - $whitelisted_ips
+  - 0.0.0.0/0
   kubernetesVersion: 1.14.6
   masterInternalName: api.internal.ops.k8s.nearform.net
   masterPublicName: api.ops.k8s.nearform.net
@@ -83,7 +83,8 @@ spec:
       mtu: 8912
   nonMasqueradeCIDR: 100.64.0.0/10
   sshAccess:
-  - $whitelisted_ips
+  - 0.0.0.0/0
+  sshKeyName: kops-ssh-key
   subnets:
   - cidr: 172.20.32.0/19
     name: eu-central-1a
