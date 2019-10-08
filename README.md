@@ -1,2 +1,3 @@
-# tf-rancher-cluster-aws
-Terraform for AWS Rancher Cluster
+This is in reference to the ticket.
+
+https://agrium.atlassian.net/browse/SWAG-629
