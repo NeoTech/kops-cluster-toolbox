@@ -5,7 +5,6 @@ defaults: &defaults
   environment:
     DOCKER_REPO: "REPO URI"
     DOCKER_WORKLOAD: "workload docker name"
-    DOCKER_BACKEND: "titus-backend"
     AWS_ECR_REGION: "us-central-1"
     AWS_EKS_REGION: "eu-central-1"
     CLUSTER_NAME: "ops.k8s.nearform.net"
