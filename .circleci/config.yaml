@@ -57,6 +57,21 @@ jobs:
           root: .
           paths:
             - .
+  bootstrap:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Install Helm"
+          command: "Some command"
+      - run:
+          name: "Do magic"
+          command: "Some command"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 workflows:
   version: 2
   untagged_build:
@@ -79,3 +94,6 @@ workflows:
             - install
             - build-terraform
             - build-kops
+      - bootstrap:
+          requires:
+            - test-cluster
