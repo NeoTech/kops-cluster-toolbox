@@ -39,8 +39,8 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: "Do something"
-          command: "Some command"
+          name: "Terraform apply"
+          command: "cd terraform && terraform apply -auto-approve"
       - persist_to_workspace:
           root: .
           paths:
@@ -52,7 +52,7 @@ jobs:
           at: .
       - run:
           name: "Do something"
-          command: "Some command"
+          command: "ls -l"
       - persist_to_workspace:
           root: .
           paths:
@@ -64,7 +64,7 @@ jobs:
           at: .
       - run:
           name: "Do something"
-          command: "Some command"
+          command: "ls -l"
       - persist_to_workspace:
           root: .
           paths:
@@ -76,10 +76,10 @@ jobs:
           at: .
       - run:
           name: "Install Helm"
-          command: "Some command"
+          command: "ls -l"
       - run:
           name: "Do magic"
-          command: "Some command"
+          command: "ls -l"
       - persist_to_workspace:
           root: .
           paths:
@@ -91,10 +91,10 @@ jobs:
           at: .
       - run:
           name: "Install Helm"
-          command: "Some command"
+          command: "ls -l"
       - run:
           name: "Do magic"
-          command: "Some command"
+          command: "ls -l"
       - persist_to_workspace:
           root: .
           paths:
@@ -106,10 +106,10 @@ jobs:
           at: .
       - run:
           name: "Install Helm"
-          command: "Some command"
+          command: "ls -l"
       - run:
           name: "Do magic"
-          command: "Some command"
+          command: "ls -l"
       - persist_to_workspace:
           root: .
           paths:
@@ -121,10 +121,10 @@ jobs:
           at: .
       - run:
           name: "Install Helm"
-          command: "Some command"
+          command: "ls -l"
       - run:
           name: "Do magic"
-          command: "Some command"
+          command: "ls -l"
       - persist_to_workspace:
           root: .
           paths:
@@ -135,28 +135,33 @@ workflows:
   infrastructure:
     jobs:
       - install
-        #      - decomission-kops:
-        #          type: approval
-        #          requires:
-        #            - install
-              #      - decomission-terraform:
-              #          requires:
-              #            - decomission-kops
-              #      - cleanup:
-              #          requires:
-              #            - decomission-terraform
-              #      - deploy-terraform:
-              #          type: approval
-              #          requires:
-              #            - install
-              #      - deploy-kops:
-              #          requires:
-              #            - deploy-terraform
-              #      - test-cluster:
-              #          requires:
-              #            - install
-              #            - deploy-terraform
-              #            - deploy-kops
-              #      - bootstrap:
-              #          requires:
-              #            - test-cluster
+      - decomission-kops:
+          type: approval
+          requires:
+            - install
+      - decomission-terraform:
+          type: approval
+          requires:
+            - decomission-kops
+      - cleanup:
+          type: approval
+          requires:
+            - decomission-terraform
+      - deploy-terraform:
+          type: approval
+          requires:
+            - install
+      - deploy-kops:
+          type: approval
+          requires:
+            - deploy-terraform
+      - test-cluster:
+          type: approval
+          requires:
+            - install
+            - deploy-terraform
+            - deploy-kops
+      - bootstrap:
+          type: approval
+          requires:
+            - test-cluster
