@@ -29,7 +29,7 @@ jobs:
             fi
       - run:
           name: "terraform init"
-          command: "cd terraform && terraform init"
+          command: "cd terraform && terraform init -backend-config=\"bucket=${TF_STATE_STORE_BUCKET}\" -backend-config=\"region=${AWS_DEFAULT_REGION}\""
       - persist_to_workspace:
           root: .
           paths:
@@ -41,7 +41,7 @@ jobs:
           at: .
       - run:
           name: "Terraform apply"
-          command: "cd terraform && terraform apply -auto-approve"
+          command: "cd terraform && terraform apply -input=false -auto-approve"
       - persist_to_workspace:
           root: .
           paths:
@@ -104,10 +104,7 @@ jobs:
           at: .
       - run:
           name: "terraform destroy"
-          command: "cd terraform && terraform destroy -auto-approve"
-      - run:
-          name: "Do magic"
-          command: "ls -l"
+          command: "cd terraform && terraform destroy -iput=false -auto-approve"
       - persist_to_workspace:
           root: .
           paths:
