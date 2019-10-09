@@ -25,7 +25,7 @@ jobs:
             aws s3api put-bucket-versioning --bucket ${TF_STATE_STORE_BUCKET} --versioning-configuration Status=Enabled
       - run:
           name: "terraform init"
-          command: "cd terraform && terraform init -var=\"bucket=${TF_STATE_STORE_BUCKET}\" -var=\"region=${AWS_DEFAULT_REGION}\""
+          command: "cd terraform && terraform init"
       - persist_to_workspace:
           root: .
           paths:
