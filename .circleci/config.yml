@@ -132,23 +132,22 @@ jobs:
 
 workflows:
   version: 2
-  infrastructure-destroy:
-    jobs:
-      - install:
-          type: approval
-      - decomission-kops:
-          requires:
-            - install
-      - decomission-terraform:
-          requires:
-            - decomission-kops
-      - cleanup:
-          requires:
-            - decomission-terraform
+  #   infrastructure-destroy:
+  #     jobs:
+  #       - install:
+  #           type: approval
+  #       - decomission-kops:
+  #           requires:
+  #             - install
+  #       - decomission-terraform:
+  #           requires:
+  #             - decomission-kops
+  #       - cleanup:
+  #           requires:
+  #             - decomission-terraform
   infrastructure-deploy:
     jobs:
-      - install:
-          type: approval
+      - install
       - deploy-terraform:
           requires:
             - install
