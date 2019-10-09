@@ -1,26 +1,32 @@
 defaults: &defaults
   docker:
-    - image: golang image for workload ??
-  working_directory: ~/
+    - image: mariusv/devops-toolbox:0.1
   environment:
     DOCKER_REPO: "REPO URI"
     DOCKER_WORKLOAD: "workload docker name"
-    AWS_ECR_REGION: "us-central-1"
+    AWS_ECR_REGION: "eu-central-1"
     AWS_EKS_REGION: "eu-central-1"
     CLUSTER_NAME: "ops.k8s.nearform.net"
 version: 2
 jobs:
   install:
     <<: *defaults
+    working_directory: ~/terraform/
     steps:
       - checkout
       - run:
-          name: "Do something"
-          command: "prequisit commands"
+          name: "Create TF state storage"
+          command: |
+            aws s3api create-bucket --bucket $TF_STATE_STORE_BUCKET --region $AWS_DEFAULT_REGION --create-bucket-configuration LocationConstraint=$AWS_DEFUALT_REGION
+            aws s3api put-bucket-versioning --bucket $TF_STATE_STORE_BUCKET --versioning-configuration Status=Enabled
+      - run:
+          name: "terraform init"
+          command: "terraform init"
       - persist_to_workspace:
           root: .
           paths:
             - .
+
   deploy-terraform:
     <<: *defaults
     steps:
@@ -123,28 +129,28 @@ workflows:
   infrastructure:
     jobs:
       - install
-      - decomission-kops:
-          type: approval
-          requires:
-            - install
-      - decomission-terraform:
-          requires:
-            - decomission-kops
-      - cleanup:
-          requires:
-            - decomission-terraform
-      - deploy-terraform:
-          type: approval
-          requires:
-            - install
-      - deploy-kops:
-          requires:
-            - deploy-terraform
-      - test-cluster:
-          requires:
-            - install
-            - deploy-terraform
-            - deploy-kops
-      - bootstrap:
-          requires:
-            - test-cluster
+        #      - decomission-kops:
+        #          type: approval
+        #          requires:
+        #            - install
+              #      - decomission-terraform:
+              #          requires:
+              #            - decomission-kops
+              #      - cleanup:
+              #          requires:
+              #            - decomission-terraform
+              #      - deploy-terraform:
+              #          type: approval
+              #          requires:
+              #            - install
+              #      - deploy-kops:
+              #          requires:
+              #            - deploy-terraform
+              #      - test-cluster:
+              #          requires:
+              #            - install
+              #            - deploy-terraform
+              #            - deploy-kops
+              #      - bootstrap:
+              #          requires:
+              #            - test-cluster
