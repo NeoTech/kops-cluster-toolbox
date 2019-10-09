@@ -45,11 +45,11 @@ jobs:
             terraform output public-nets > ../public-nets.yaml
             terraform output private-nets > ../private-nets.yaml
             terraform output vpc-id > ../vpc-id.yaml
-            terraform output private-key > ../ssh-key-${NAME}.pem
+            terraform output private-key > ~/ssh-key-${NAME}
             echo $(terraform output kops-id):$(terraform output kops-secret) > ../acl
             terraform output build-toolbox-ecr > ../ecr.yaml
       - store_artifacts:
-          path: ~/ssh-key-${NAME}.pem
+          path: ~/ssh-key-${NAME}
       - persist_to_workspace:
           root: .
           paths:
