@@ -17,6 +17,7 @@ jobs:
       - run:
           name: "Create TF state storage"
           command: |
+            echo $AWS_DEFAULT_REGION
             aws s3api create-bucket --bucket $TF_STATE_STORE_BUCKET --region $AWS_DEFAULT_REGION --create-bucket-configuration LocationConstraint=$AWS_DEFUALT_REGION
             aws s3api put-bucket-versioning --bucket $TF_STATE_STORE_BUCKET --versioning-configuration Status=Enabled
       - run:
