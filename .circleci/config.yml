@@ -49,7 +49,7 @@ jobs:
             echo $(terraform output kops-id):$(terraform output kops-secret) > ../acl
             terraform output build-toolbox-ecr > ../ecr.yaml
       - store_artifacts:
-          path: ~/ssh-key$-{NAME}.pem
+          path: ~/ssh-key-${NAME}.pem
       - persist_to_workspace:
           root: .
           paths:
