@@ -37,7 +37,7 @@ jobs:
           at: .
       - run:
           name: "Terraform apply"
-          command: "cd terraform && terraform apply -input=false -auto-approve > terraform.session"
+          command: "cd terraform && terraform apply -input=false -auto-approve"
       - run:
           name: "Extract terraform outputs"
           command: |
