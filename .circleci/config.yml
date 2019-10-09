@@ -21,7 +21,7 @@ jobs:
           root: .
           paths:
             - .
-  build-terraform:
+  deploy-terraform:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -33,7 +33,7 @@ jobs:
           root: .
           paths:
             - .
-  build-kops:
+  deploy-kops:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -72,22 +72,62 @@ jobs:
           root: .
           paths:
             - .
+  decomission-kops:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Install Helm"
+          command: "Some command"
+      - run:
+          name: "Do magic"
+          command: "Some command"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  decomission-terraform:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Install Helm"
+          command: "Some command"
+      - run:
+          name: "Do magic"
+          command: "Some command"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  cleanup:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Install Helm"
+          command: "Some command"
+      - run:
+          name: "Do magic"
+          command: "Some command"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
 workflows:
   version: 2
-  untagged_build:
+  infrastructure:
     jobs:
       - install
-      - build-terraform:
+      - deploy-terraform:
           type: approval
           requires:
             - install
-          filters:
-            branches:
-                only:
-                    - master
-            tags:
-                ignore: /.*/
-      - build-kops:
+      - deploy-kops:
           requires:
             - build-terraform
       - test-cluster:
@@ -98,3 +138,13 @@ workflows:
       - bootstrap:
           requires:
             - test-cluster
+      - decomission-kops:
+          type: approval
+          requires:
+            - install
+      - decomission-terraform:
+          requires:
+            - decomission-kops
+      - cleanup:
+          requires:
+            - decomission-terraform
