@@ -9,15 +9,17 @@ defaults: &defaults
     CLUSTER_NAME: "ops.k8s.nearform.net"
 version: 2
 jobs:
+  gateway:
+    <<: *defaults
+    steps:
+      run:
+        name: "Holding for input"
+        command: "echo 1"
   install:
     <<: *defaults
     working_directory: ~/
     steps:
       - checkout
-      - run:
-          name: "Debug"
-          command: |
-            ls -la
       - run:
           name: "Create TF state storage"
           command: |
@@ -25,9 +27,6 @@ jobs:
             aws s3api create-bucket --bucket ${TF_STATE_STORE_BUCKET} --region ${AWS_DEFAULT_REGION} --create-bucket-configuration LocationConstraint=${AWS_DEFAULT_REGION}
             aws s3api put-bucket-versioning --bucket ${TF_STATE_STORE_BUCKET} --versioning-configuration Status=Enabled
             fi
-      - run:
-          name: "terraform init"
-          command: "cd terraform && terraform init"
       - persist_to_workspace:
           root: .
           paths:
@@ -38,6 +37,9 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run:
+          name: "terraform init"
+          command: "cd terraform && terraform init"
       - run:
           name: "Terraform apply"
           command: "cd terraform && terraform apply -auto-approve"
@@ -132,22 +134,28 @@ jobs:
 
 workflows:
   version: 2
-  #   infrastructure-destroy:
-  #     jobs:
-  #       - install:
-  #           type: approval
-  #       - decomission-kops:
-  #           requires:
-  #             - install
-  #       - decomission-terraform:
-  #           requires:
-  #             - decomission-kops
-  #       - cleanup:
-  #           requires:
-  #             - decomission-terraform
+   infrastructure-destroy:
+     jobs:
+       - gateway:
+          type: approval
+       - install:
+          requires: gateway
+       - decomission-kops:
+           requires:
+             - install
+       - decomission-terraform:
+           requires:
+             - decomission-kops
+       - cleanup:
+           requires:
+             - decomission-terraform
   infrastructure-deploy:
     jobs:
-      - install
+      - gateway:
+          type: approval
+      - install:
+          requires:
+            - gateway
       - deploy-terraform:
           requires:
             - install
