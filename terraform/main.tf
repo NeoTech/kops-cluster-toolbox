@@ -23,11 +23,11 @@ module "vpc" {
   // Kubernetes knows that it can use them for internal load balancers
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = "1"
-    "SubnetType" = "Private"
+    "SubnetType"                      = "Private"
   }
 
   public_subnet_tags = {
-    "SubnetType" = "Utility",
+    "SubnetType"             = "Utility",
     "kubernetes.io/role/elb" = "1"
   }
   enable_nat_gateway     = true
