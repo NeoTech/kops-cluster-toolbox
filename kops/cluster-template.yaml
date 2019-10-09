@@ -113,9 +113,9 @@ spec:
     kops.k8s.io/instancegroup: bastions
   role: Bastion
   subnets:
-  - utility-{{.awsregion}}a
-  - utility-{{.awsregion}}b
-  - utility-{{.awsregion}}c
+  - {{.name}}-public-{{.awsregion}}a
+  - {{.name}}-public-{{.awsregion}}b
+  - {{.name}}-public-{{.awsregion}}c
 
 ---
 
@@ -135,7 +135,7 @@ spec:
     kops.k8s.io/instancegroup: master-{{.awsregion}}a
   role: Master
   subnets:
-  - {{.name}}-{{.awsregion}}a
+  - {{.name}}-private-{{.awsregion}}a
 
 ---
 
@@ -157,7 +157,7 @@ spec:
     kops.k8s.io/instancegroup: nodes
   role: Node
   subnets:
-  - {{.name}}-{{.awsregion}}a
-  - {{.name}}-{{.awsregion}}b
-  - {{.name}}-{{.awsregion}}c
+  - {{.name}}-private-{{.awsregion}}a
+  - {{.name}}-private-{{.awsregion}}b
+  - {{.name}}-private-{{.awsregion}}c
 

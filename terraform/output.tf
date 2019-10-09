@@ -24,25 +24,31 @@ output "nets" {
   name: ${var.project_name}-public-${var.aws_region}a
   type: Utility
   id: ${module.vpc.public_subnets[0]}
+  zone: ${var.aws_region}a
 - cidr: ${module.vpc.public_subnets_cidr_blocks[1]}
   name: ${var.project_name}-public-${var.aws_region}b
   type: Utility
   id: ${module.vpc.public_subnets[1]}
+  zone: ${var.aws_region}b
 - cidr: ${module.vpc.public_subnets_cidr_blocks[2]}
   name: ${var.project_name}-public-${var.aws_region}c
   type: Utility
   id: ${module.vpc.public_subnets[2]}
+  zone: ${var.aws_region}c
 - cidr: ${module.vpc.private_subnets_cidr_blocks[0]}
   name: ${var.project_name}-private-${var.aws_region}a
   type: Private
   id: ${module.vpc.private_subnets[0]}
+  zone: ${var.aws_region}a
 - cidr: ${module.vpc.private_subnets_cidr_blocks[1]}
   name: ${var.project_name}-private-${var.aws_region}b
   type: Private
   id: ${module.vpc.private_subnets[1]}
+  zone: ${var.aws_region}b
 - cidr: ${module.vpc.private_subnets_cidr_blocks[2]}
   name: ${var.project_name}-private-${var.aws_region}c
   type: Private
   id: ${module.vpc.private_subnets[2]}
+  zone: ${var.aws_region}c
 EOT
 }

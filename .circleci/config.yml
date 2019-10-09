@@ -81,7 +81,13 @@ jobs:
           command: "kops create -f cluster.yaml"
       - run:
           name: "Waiting for kops"
-          command: "ls -l"
+          command: |
+            export KUBECONFIG=~/.kube/config
+            while [ 1 ]; do
+              kops validate cluster --state s3://agrium-k8-kops-state-store && break || sleep 30
+            done;
+      - store_artifacts:
+          path: "~/.kube/config"
       - persist_to_workspace:
           root: .
           paths:
