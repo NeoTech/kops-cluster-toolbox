@@ -129,12 +129,12 @@ workflows:
             - install
       - deploy-kops:
           requires:
-            - build-terraform
+            - deploy-terraform
       - test-cluster:
           requires:
             - install
-            - build-terraform
-            - build-kops
+            - deploy-terraform
+            - deploy-kops
       - bootstrap:
           requires:
             - test-cluster
