@@ -22,9 +22,14 @@ module "vpc" {
   // Private subnets in your VPC should be tagged accordingly so that 
   // Kubernetes knows that it can use them for internal load balancers
   private_subnet_tags = {
-    "kubernetes.io/role/internal-alb" = "1"
+    "kubernetes.io/role/internal-elb" = "1"
+    "SubnetType" = "Private"
   }
 
+  public_subnet_tags = {
+    "SubnetType" = "Utility",
+    "kubernetes.io/role/elb" = "1"
+  }
   enable_nat_gateway     = true
   single_nat_gateway     = false
   one_nat_gateway_per_az = true
