@@ -21,8 +21,10 @@ jobs:
       - run:
           name: "Create TF state storage"
           command: |
+            if [ $(aws s3 ls | grep ops.k8s.nearform.net-tf-state | wc -l) -eq 0 ]; then
             aws s3api create-bucket --bucket ${TF_STATE_STORE_BUCKET} --region ${AWS_DEFAULT_REGION} --create-bucket-configuration LocationConstraint=${AWS_DEFAULT_REGION}
             aws s3api put-bucket-versioning --bucket ${TF_STATE_STORE_BUCKET} --versioning-configuration Status=Enabled
+            fi
       - run:
           name: "terraform init"
           command: "cd terraform && terraform init"
