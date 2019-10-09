@@ -11,9 +11,13 @@ version: 2
 jobs:
   install:
     <<: *defaults
-    working_directory: ~/terraform/
+    working_directory: ~/
     steps:
       - checkout
+      - run:
+          name: "Debug"
+          command: |
+            ls -la
       - run:
           name: "Create TF state storage"
           command: |
