@@ -136,19 +136,20 @@ workflows:
   version: 2
    infrastructure-destroy:
      jobs:
-       - gateway:
+      - gateway:
           type: approval
-       - install:
-          requires: gateway
-       - decomission-kops:
-           requires:
-             - install
-       - decomission-terraform:
-           requires:
-             - decomission-kops
-       - cleanup:
-           requires:
-             - decomission-terraform
+      - install:
+          requires:
+            - gateway
+      - decomission-kops:
+          requires:
+            - install
+      - decomission-terraform:
+          requires:
+            - decomission-kops
+      - cleanup:
+          requires:
+            - decomission-terraform
   infrastructure-deploy:
     jobs:
       - gateway:
