@@ -68,10 +68,17 @@ jobs:
           at: .
       - run:
           name: "Creating kops template"
-          command: "kops toolbox template --template kops/cluster-template.yaml --values data/values/values.yaml --snippets data/snippets --format-yaml > cluster.yaml"
+          command: |
+            export KUBECONFIG="~/config.dummy"
+            kops toolbox template --template kops/cluster-template.yaml --values data/values/values.yaml --snippets data/snippets --format-yaml > cluster.yaml
+            unset KUBECONFIG
+            rm config.dummy
       - run:
           name: "Applying kops template"
-          command: "cat cluster.yaml"
+          command: "kops create -f cluster.yaml"
+      - run:
+          name: "Waiting for kops"
+          command: "ls -l"
       - persist_to_workspace:
           root: .
           paths:
