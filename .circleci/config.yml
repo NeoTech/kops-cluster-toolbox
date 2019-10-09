@@ -27,14 +27,14 @@ jobs:
           name: "terraform init"
           command: "cd terraform && terraform init -backend-config=\"bucket=${TF_STATE_STORE_BUCKET}\" -backend-config=\"region=${AWS_DEFAULT_REGION}\""
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - .
+            - ~/
   deploy-terraform:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "Terraform apply"
           command: "cd terraform && terraform apply -input=false -auto-approve"
@@ -49,40 +49,40 @@ jobs:
             echo $(terraform output kops-id):$(terraform output kops-secret) > acl
             terraform output build-toolbox-ecr > ecr.yaml
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - .
+            - ~/
   deploy-kops:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "Echo resources"
           command: |
             cat public-nets.yaml private-nets.yaml vpc-id.yaml
             cat ecr.yaml
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - .
+            - ~/
   test-cluster:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "Do something"
           command: "ls -l"
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - .
+            - ~/
   bootstrap:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "Install Helm"
           command: "ls -l"
@@ -90,38 +90,38 @@ jobs:
           name: "Do magic"
           command: "ls -l"
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - .
+            - ~/
   decomission-kops:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "Destroy Kops"
           command: "ls -l"
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - .
+            - ~/
   decomission-terraform:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "terraform destroy"
           command: "cd terraform && terraform destroy -iput=false -auto-approve"
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - .
+            - ~/
   cleanup:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: "Install Helm"
           command: "ls -l"
@@ -129,9 +129,9 @@ jobs:
           name: "Do magic"
           command: "ls -l"
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - .
+            - ~/
 
 workflows:
   version: 2
