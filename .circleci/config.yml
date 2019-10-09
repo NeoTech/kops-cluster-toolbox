@@ -1,6 +1,7 @@
 defaults: &defaults
   docker:
     - image: mariusv/devops-toolbox:0.1
+  working_directory: ~/
   environment:
     DOCKER_REPO: "REPO URI"
     DOCKER_WORKLOAD: "workload docker name"
@@ -12,12 +13,11 @@ jobs:
   gateway:
     <<: *defaults
     steps:
-      run:
-        name: "Holding for input"
-        command: "echo 1"
+      - run:
+          name: "Holding for input"
+          command: "echo 1"
   install:
     <<: *defaults
-    working_directory: ~/
     steps:
       - checkout
       - run:
@@ -31,7 +31,6 @@ jobs:
           root: .
           paths:
             - .
-
   deploy-terraform:
     <<: *defaults
     steps:
