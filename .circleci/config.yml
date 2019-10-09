@@ -123,6 +123,16 @@ workflows:
   infrastructure:
     jobs:
       - install
+      - decomission-kops:
+          type: approval
+          requires:
+            - install
+      - decomission-terraform:
+          requires:
+            - decomission-kops
+      - cleanup:
+          requires:
+            - decomission-terraform
       - deploy-terraform:
           type: approval
           requires:
@@ -138,13 +148,3 @@ workflows:
       - bootstrap:
           requires:
             - test-cluster
-      - decomission-kops:
-          type: approval
-          requires:
-            - install
-      - decomission-terraform:
-          requires:
-            - decomission-kops
-      - cleanup:
-          requires:
-            - decomission-terraform
