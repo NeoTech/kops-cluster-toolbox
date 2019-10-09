@@ -1,6 +1,6 @@
 variable "project_name" {
   type        = string
-  default     = "agrium-k8s"
+  default     = "ops.k8s.nearform.net"
   description = "The project name used as name or prefix of all AWS resources."
 }
 
