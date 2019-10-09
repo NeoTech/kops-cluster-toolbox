@@ -132,36 +132,33 @@ jobs:
 
 workflows:
   version: 2
-  infrastructure:
-    jobs:
-      - install
-      - decomission-kops:
+  infrastructure-destroy:
+      - install:
           type: approval
+      - decomission-kops:
           requires:
             - install
       - decomission-terraform:
-          type: approval
           requires:
             - decomission-kops
       - cleanup:
-          type: approval
           requires:
             - decomission-terraform
-      - deploy-terraform:
+  infrastructure-deploy:
+    jobs:
+      - install:
           type: approval
+      - deploy-terraform:
           requires:
             - install
       - deploy-kops:
-          type: approval
           requires:
             - deploy-terraform
       - test-cluster:
-          type: approval
           requires:
             - install
             - deploy-terraform
             - deploy-kops
       - bootstrap:
-          type: approval
           requires:
             - test-cluster
