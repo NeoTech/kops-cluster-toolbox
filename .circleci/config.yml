@@ -133,6 +133,7 @@ jobs:
 workflows:
   version: 2
   infrastructure-destroy:
+    jobs:
       - install:
           type: approval
       - decomission-kops:
