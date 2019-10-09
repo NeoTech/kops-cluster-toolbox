@@ -1,0 +1,163 @@
+apiVersion: kops/v1alpha2
+kind: Cluster
+metadata:
+  name: {{.name}}
+spec:
+  additionalPolicies:
+    node: |
+      [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "acm:ListCertificates",
+            "acm:GetCertificate",
+            "acm:DescribeCertificate",
+            "autoscaling:DescribeAutoScalingGroups",
+            "autoscaling:AttachLoadBalancers",
+            "autoscaling:DetachLoadBalancers",
+            "autoscaling:AttachLoadBalancerTargetGroups",
+            "autoscaling:DetachLoadBalancerTargetGroups",
+            "autoscaling:DescribeLoadBalancerTargetGroups",
+            "cloudformation:*",
+            "cloudwatch:ListMetrics",
+            "cloudwatch:GetMetricStatistics",
+            "cloudwatch:Describe*",
+            "elasticloadbalancing:*",
+            "elasticloadbalancingv2:*",
+            "ec2:DescribeAccountAttributes",
+            "ec2:DescribeInternetGateways",
+            "ec2:DescribeInstances",
+            "ec2:DescribeSubnets",
+            "ec2:DescribeSecurityGroups",
+            "ec2:DescribeRouteTables",
+            "ec2:DescribeVpcs",
+            "health:DescribeEvents",
+            "iam:GetServerCertificate",
+            "iam:CreateServiceLinkedRole",
+            "iam:ListServerCertificates"
+          ],
+          "Resource": ["*"]
+        }
+      ]
+  api:
+    loadBalancer:
+      type: Public
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudLabels:
+    kubernetes.io/cluster/{{.name}}: owned
+  cloudProvider: aws
+  configBase: s3://{{.statebucket}}/{{.name}}
+  etcdClusters:
+  - etcdMembers:
+    - instanceGroup: master-{{.awsregion}}a
+      name: a
+    name: main
+  - etcdMembers:
+    - instanceGroup: master-{{.awsregion}}a
+      name: a
+    name: events
+  externalDns:
+    watchIngress: true
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubelet:
+    anonymousAuth: false
+    authenticationTokenWebhook: true
+    authorizationMode: Webhook
+    featureGates:
+      ExpandInUsePersistentVolumes: "true"
+  kubeProxy:
+      metricsBindAddress: 0.0.0.0
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  kubernetesVersion: 1.14.6
+  masterInternalName: api.internal.{{.name}}
+  masterPublicName: api.{{.name}}
+  networkCIDR: 172.20.0.0/16
+  networkID: {{.vpcid}}
+  networking:
+    weave:
+      mtu: 8912
+  nonMasqueradeCIDR: 100.64.0.0/10
+  sshAccess:
+  - 0.0.0.0/0
+  sshKeyName: kops-ssh-key
+  subnets:
+    {{ include "nets.yaml" . | indent 4 }}
+  topology:
+    bastion:
+      bastionPublicName: bastion.{{.name}}
+    dns:
+      type: Public
+    masters: private
+    nodes: private
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  
+  labels:
+    kops.k8s.io/cluster: {{.name}}
+  name: bastions
+spec:
+  image: kope.io/k8s-1.14-debian-stretch-amd64-hvm-ebs-2019-08-16
+  machineType: t2.micro
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: bastions
+  role: Bastion
+  subnets:
+  - utility-{{.awsregion}}a
+  - utility-{{.awsregion}}b
+  - utility-{{.awsregion}}c
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  
+  labels:
+    kops.k8s.io/cluster: {{.name}}
+  name: master-eu-central-1a
+spec:
+  image: kope.io/k8s-1.14-debian-stretch-amd64-hvm-ebs-2019-08-16
+  machineType: m3.medium
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-{{.awsregion}}a
+  role: Master
+  subnets:
+  - {{.name}}-{{.awsregion}}a
+
+---
+
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  
+  labels:
+    kops.k8s.io/cluster: {{.name}}
+  name: nodes
+spec:
+  cloudLabels:
+    kubernetes.io/cluster/{{.name}}: owned
+  image: kope.io/k8s-1.14-debian-stretch-amd64-hvm-ebs-2019-08-16
+  machineType: m4.large
+  maxSize: 3
+  minSize: 3
+  nodeLabels:
+    kops.k8s.io/instancegroup: nodes
+  role: Node
+  subnets:
+  - {{.name}}-{{.awsregion}}a
+  - {{.name}}-{{.awsregion}}b
+  - {{.name}}-{{.awsregion}}c
+

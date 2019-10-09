@@ -10,10 +10,15 @@ output "kops-secret" {
 output "build-toolbox-ecr" {
   value = aws_ecr_repository.build-toolbox.repository_url
 }
-output "vpc-id" {
-  value = module.vpc.vpc_id
+output "kops-values" {
+  value = <<EOT
+vpcid: ${module.vpc.vpc_id}
+awsregion: ${var.aws_region}
+name: ${var.project_name}
+statebucket: ${var.kops_state_store_s3_bucket}
+EOT
 }
-output "public-nets" {
+output "nets" {
   value = <<EOT
 - cidr: ${module.vpc.public_subnets_cidr_blocks[0]}
   name: ${var.project_name}-public-${var.aws_region}a
@@ -27,10 +32,6 @@ output "public-nets" {
   name: ${var.project_name}-public-${var.aws_region}c
   type: Utility
   id: ${module.vpc.public_subnets[2]}
-EOT
-}
-output "private-nets" {
-  value = <<EOT
 - cidr: ${module.vpc.private_subnets_cidr_blocks[0]}
   name: ${var.project_name}-private-${var.aws_region}a
   type: Private
@@ -44,7 +45,4 @@ output "private-nets" {
   type: Private
   id: ${module.vpc.private_subnets[2]}
 EOT
-}
-output "aws-region" {
-  value = var.aws_region
 }
