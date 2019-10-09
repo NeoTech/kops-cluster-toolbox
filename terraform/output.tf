@@ -9,3 +9,6 @@ output "kops_id" {
 output "kops_secret" {
   value = aws_iam_access_key.kops_access_key.secret
 }
+output "build-toolbox-ecr" {
+  value = aws_ecr_repository.build-toolbox.repository_url
+}
