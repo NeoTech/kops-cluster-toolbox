@@ -41,6 +41,7 @@ jobs:
       - run:
           name: "Extract terraform outputs"
           command: |
+            cd terraform
             terraform output public-nets > public-nets.yaml
             terraform output private-nets > private-nets.yaml
             terraform output vpc-id > vpc-id.yaml
