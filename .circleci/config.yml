@@ -3,11 +3,7 @@ defaults: &defaults
     - image: mariusv/devops-toolbox:0.1
   working_directory: ~/
   environment:
-    DOCKER_REPO: "REPO URI"
-    DOCKER_WORKLOAD: "workload docker name"
-    AWS_ECR_REGION: "eu-central-1"
-    AWS_EKS_REGION: "eu-central-1"
-    CLUSTER_NAME: "ops.k8s.nearform.net"
+    ALLOW_TERMINATION: 1
 version: 2
 jobs:
   gateway:
@@ -41,7 +37,16 @@ jobs:
           at: .
       - run:
           name: "Terraform apply"
-          command: "cd terraform && terraform apply -input=false -auto-approve"
+          command: "cd terraform && terraform apply -input=false -auto-approve > terraform.session"
+      - run:
+          name: "Extract terraform outputs"
+          command: |
+            terraform output public-nets > public-nets.yaml
+            terraform output private-nets > private-nets.yaml
+            terraform output vpc-id > vpc-id.yaml
+            terraform output private-key > ssh-key-${NAME}.pem
+            echo $(terraform output kops-id):$(terraform output kops-secret) > acl
+            terraform output build-toolbox-ecr > ecr.yaml
       - persist_to_workspace:
           root: .
           paths:
@@ -52,8 +57,10 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: "Do something"
-          command: "ls -l"
+          name: "Echo resources"
+          command: |
+            cat public-nets.yaml private-nets.yaml vpc-id.yaml
+            cat ecr.yaml
       - persist_to_workspace:
           root: .
           paths:
