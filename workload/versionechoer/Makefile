@@ -3,16 +3,18 @@ SHELL=/bin/bash
 
 
 # Parameters - defaulted
-DOCKERHUB_REPO_NAME ?= ${USER}
+DOCKERHUB_USER ?= ${USER}
 IMAGE_NAME ?= versionechoer
 VERSION ?= $(shell cat VERSION)
 
 
 # Derived or calculated
-FULL_IMAGE_NAME = ${DOCKERHUB_REPO_NAME}/${IMAGE_NAME}
-FULL_IMAGE_NAME_AND_TAG = ${FULL_IMAGE_NAME}:${VERSION}
+IMAGE_REPO_NAME = ${DOCKERHUB_USER}/${IMAGE_NAME}
+RELEASE_NAME = ${IMAGE_NAME}
+TAGGED_IMAGE = ${IMAGE_REPO}:${VERSION}
 
 
+# Image targets
 build:
 	@# Fast build - so we can run without having to wait for full static build
 	go build -ldflags "-X main.version=${VERSION}" .
@@ -22,10 +24,15 @@ build-image:
 	@docker image build \
                 --build-arg VERSION=${VERSION} \
                 --pull \
-                --tag ${FULL_IMAGE_NAME_AND_TAG} \
+                --tag ${TAGGED_IMAGE} \
                 .
 
 
-# Assumes you have logged in to dockerhub
 push-image:
-	@docker image push ${FULL_IMAGE_NAME_AND_TAG}
+	@# Assumes you have logged in to dockerhub
+	@docker image push ${TAGGED_IMAGE}
+
+
+# Helm chart targets
+render-chart:
+	@helm template --name ${RELEASE_NAME} --set image.tag=${VERSION} ./helm

@@ -1,0 +1,40 @@
+fullnameOverride: versionechoer
+
+image:
+  repository: pmcgrath/versionechoer
+  tag: "0.1.1"
+
+ingress:
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  enabled: true
+  hosts:
+    - host: versionechoer.somewhere.com
+      paths:
+      - /
+  tls: []
+  #  - secretName: versionechoer-tls
+  #    hosts:
+  #      - chart: versionechoer.somewhere.com
+
+replicaCount: 3
+
+# Same as: kubectl explain deployment.spec.template.spec.containers.resources
+resources:
+  limits:
+    cpu: 100m
+    memory: 50Mi
+  requests:
+    cpu: 100m
+    memory: 50Mi
+
+# Same as: kubectl explain deployment.spec.template.spec.securityContext
+securityContext:
+  runAsGroup: 65534
+  runAsNonRoot: true
+  runAsUser: 65534
+
+service:
+  type: ClusterIP
+  port: 80

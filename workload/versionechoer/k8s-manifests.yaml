@@ -16,7 +16,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-      - image: pmcgrath/versionechoer:1.0
+      - image: pmcgrath/versionechoer:0.1.1
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
