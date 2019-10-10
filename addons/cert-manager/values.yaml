@@ -1,0 +1,18 @@
+global:
+  rbac:
+    create: true
+serviceAccount:
+  create: true
+  name: cert-manager
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+securityContext:
+  enabled: true
+ingressShim:
+  enabled: true
+  defaultIssuerName: letsencrypt-prod
+  defaultIssuerKind: ClusterIssuer
+  defaultACMEChallengeType: http01
+
