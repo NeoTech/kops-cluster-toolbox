@@ -46,15 +46,3 @@ resource "aws_s3_bucket" "kops_state_store" {
   bucket = var.kops_state_store_s3_bucket
   acl    = "private"
 }
-
-module "ingress_sg" {
-  source = "terraform-aws-modules/security-group/aws"
-
-  name        = "user-service"
-  description = "Security group for user-service with custom ports open within VPC"
-  vpc_id      = module.vpc.vpc_id
-
-  ingress_cidr_blocks = [var.vpc_cidr_block]
-  ingress_rules       = ["https-443-tcp", "http-80-tcp"]
-}
-

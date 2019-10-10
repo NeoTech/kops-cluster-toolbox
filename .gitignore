@@ -2,3 +2,4 @@ cluster.yaml
 kops.sh
 data/
 config.kops
+terraform-static/config.tf terraform-static/ecr.tf terraform-static/iam.tf terraform-static/main.tf terraform-static/output.tf terraform-static/README.md terraform-static/runme1st.sh terraform-static/ssh.tf terraform-static/variables.tf
