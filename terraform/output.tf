@@ -16,6 +16,7 @@ vpcid: ${module.vpc.vpc_id}
 awsregion: ${var.aws_region}
 name: ${var.project_name}
 statebucket: ${var.kops_state_store_s3_bucket}
+workersgid: ${aws_security_group.worker.id}
 EOT
 }
 output "nets" {
