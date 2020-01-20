@@ -18,5 +18,3 @@ Will provision a KOPS based cluster onto AWS using a small and locked down VPC c
     * A docker image for CircleCI that provides the necessary tooling for running the setup in CircleCI.
     * Helm charts for deploying Addons to Rancher manager.
     * A config.dummy thats needed for a CI step. Which is an inert kubecfg file.
-
-This is in reference to the ticket.
