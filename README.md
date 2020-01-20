@@ -20,5 +20,3 @@ Will provision a KOPS based cluster onto AWS using a small and locked down VPC c
     * A config.dummy thats needed for a CI step. Which is an inert kubecfg file.
 
 This is in reference to the ticket.
-
-https://agrium.atlassian.net/browse/SWAG-629
