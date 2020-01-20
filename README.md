@@ -16,5 +16,4 @@ Will provision a KOPS based cluster onto AWS using a small and locked down VPC c
 * Include are:
     * A small go based workload that can be built and deployed and just echoes a version number. A CI pipeline test can be done by just updating the version and rebuild it.
     * A docker image for CircleCI that provides the necessary tooling for running the setup in CircleCI.
-    * Helm charts for deploying Addons to Rancher manager.
     * A config.dummy thats needed for a CI step. Which is an inert kubecfg file.
