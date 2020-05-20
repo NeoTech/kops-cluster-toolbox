@@ -160,3 +160,36 @@ spec:
   - {{.name}}-private-{{.awsregion}}b
   - {{.name}}-private-{{.awsregion}}c
 
+--- 
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: skynet.xxx.xx
+  name: es-instances-eu-central-1b
+spec:
+  additionalSecurityGroups:
+  - xx-xxxxxxxxxxxxxxx # Ingress security group
+  - xx-xxxxxxxxxxxxxxx # EFS security group
+  - xx-xxxxxxxxxxxxxxx # Platform security group
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20200423
+  machineType: t3.xlarge
+  maxPrice: "0.0800"
+  maxSize: 3
+  minSize: 1
+  nodeLabels:
+    k8s.info/isSpot: "true"
+    kops.k8s.io/instancegroup: es-instances-eu-central-1b
+    type: es-instances
+  cloudLabels:
+    k8s.io/cluster-autoscaler/enabled: ""
+    k8s.io/cluster-autoscaler/node-template/label: ""
+    k8s.io/cluster-autoscaler/skynet.xxx.xx: ""
+    kubernetes.io/cluster/skynet.xxx.xx: owned
+  role: Node
+  subnets:
+  - eu-central-1b
+  taints:
+  - type=es-instance:NoSchedule
+
